@@ -1,0 +1,105 @@
+/**
+功能：一些可以include的样式
+例如clearfix,
+目前还在努力规划中，有什么好的建议可以写在这里，最后独立出来一套UI供现在的项目使用。
+ */
+
+
+/**
+清除浮动
+ */
+
+%clearfix {
+    &:before,
+    &:after {
+        content: '';
+        display: table;
+        font: 0/0 a;
+    }
+    &:after {
+        clear: both;
+        visibility: hidden;
+    }
+}
+
+%flex-start {
+    display: flex;
+    align-items: stretch;
+}
+
+//纵向flex布局
+%flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+%flex-row-start {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+%flex-row-end {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+%flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+%flex-column-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+%flex-row-space {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+//btn
+%btn-base {
+    outline: none;
+    //padding:0 10px;
+    //min-width:80px;
+    border-width: 1px;
+    border-style: solid;
+    //font-size:12px;
+    box-shadow: none;
+    //background-color: #fff;
+}
+
+//input base
+%input-base {
+    outline: none;
+    //padding:0 10px;
+    //min-width:80px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 12px;
+    box-shadow: none;
+    background-color: #fff;
+}
+
+//单行文字超出显示省略号
+%text-ellipsis-one-line {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+//两行文字超出显示省略号,autoprefixer不能去掉，不然样式会失去效果，webpack打包会有问题
+%text-ellipsis-two-line {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box; //作为弹性伸缩盒子模型显示。
+    -webkit-box-orient: vertical; //设置伸缩盒子的子元素排列方式--从上到下垂直排列
+    -webkit-line-clamp: 2; //显示的行
+}

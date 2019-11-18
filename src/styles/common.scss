@@ -1,0 +1,387 @@
+@import './include.scss';
+
+// the theme color
+$main-red: #de3e3b;
+$main-white: #fff;
+$main-black: #333;
+$main-black-light: #666060;
+$main-black-lighter: #979797;
+$main-grey: #d2d1d2;
+$main-grey-light: #e3e3e3;
+$main-grey-lighter: #e1e1e1;
+$main-orange: #ffbd2d;
+$main-blue: #2b63ae;
+$main-blue-middle: #0a9aee;
+// back ground color
+$page-background: #f2f2f2;
+$page-background-light: #f8f8f8;
+// border color
+$border-base-color: #f3f3f3;
+$table-header-bg: #f3f3f3;
+/**ellipsis 省略号 **/
+
+.e-text-ellipsis__oneLine {
+  @extend %text-ellipsis-one-line;
+}
+
+.e-text-ellipsis__twoLine {
+  @extend %text-ellipsis-two-line;
+}
+
+/**flex 布局 **/
+
+.flex-column {
+  @extend %flex-column;
+}
+
+.flex-row-start {
+  @extend %flex-row-start;
+}
+
+.flex-center {
+  @extend %flex-center;
+}
+
+.flex-row-end {
+  @extend %flex-row-end;
+}
+
+.flex-column-center {
+  @extend %flex-column-center;
+}
+
+.flex-start {
+  @extend %flex-start;
+}
+
+.flex-row-space {
+  @extend %flex-row-space;
+}
+
+.flex-start-space {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/** link **/
+
+%link {
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.e-text-link {
+  color: $main-blue;
+  @extend %link;
+  &:hover {
+    color: $main-red;
+  }
+  &:focus {
+    color: $main-blue-middle;
+  }
+  &-red,
+  &-red:hover {
+    @extend %link;
+    color: $main-red;
+  }
+  &-grey,
+  &-grey:hover {
+    @extend %link;
+    color: $main-black-lighter;
+  }
+  &-white,
+  &-white:hover {
+    @extend %link;
+    color: $main-white;
+  }
+}
+
+/* 带cursor 的省略 */
+
+.beyond-ellipsis-show {
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/** 文字位置 **/
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/** 主题颜色定义 **/
+
+.color-primary {
+  color: $main-red;
+}
+
+.color-white {
+  color: $main-white;
+}
+
+.color-black {
+  color: $main-black;
+}
+
+.color-black-light {
+  color: $main-black-light;
+}
+
+.color-black-lighter {
+  color: $main-black-lighter;
+}
+
+.color-grey {
+  color: $main-grey;
+}
+
+.color-grey-light {
+  color: $main-grey-light;
+}
+
+.color-grey-lighter {
+  color: $main-grey-lighter;
+}
+
+.page-bg {
+  background-color: $page-background;
+}
+
+.page-bg-light {
+  background-color: $page-background-light;
+}
+
+/** 表格分页公用样式 **/
+
+.footer-pagination {
+  // bottom: 10px;
+  width: 100%;
+  margin: 15px 0 7px 0;
+  text-align: right;
+  display: flex;
+  justify-content: center;
+  // position: absolute;
+  .el-pagination__total {
+    margin-right: 50px;
+  }
+  .el-pagination__jump {
+    flex: 1;
+    text-align: right;
+  }
+  .el-pagination__sizes {
+    flex: 1;
+    text-align: left;
+  }
+}
+/** 滚动条优化 **/
+
+.better-scroll-bar {
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: $main-white;
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $main-grey-lighter;
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+  }
+}
+
+/* 消除google浏览器记住密码自动填充背景 */
+
+:-webkit-autofill,
+:-webkit-autofill:hover,
+:-webkit-autofill:focus,
+:-webkit-autofill:active {
+  -webkit-text-fill-color: $main-black !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* 页面内容显示区域 */
+.page-content {
+  height: 100%;
+  padding: 10px 20px;
+}
+.search-box {
+  border-bottom: 2px solid $main-grey-light;
+  .el-date-editor.el-input,
+  .el-date-editor.el-input__inner {
+    width: 100%;
+  }
+  .el-input__icon {
+    width: 25px;
+    text-align: center;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+  }
+  .el-select-dropdown__item {
+    font-size: 12px !important;
+  }
+  .el-select {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+  }
+  .el-form-item {
+    &.address-content {
+      margin-bottom: 0 !important;
+    }
+    margin-bottom: 12px;
+    .el-form-item__label {
+      font-weight: 400;
+      padding-right: 12px;
+    }
+    .el-select-dropdown__item {
+      font-size: 12px !important;
+    }
+    .el-select {
+      display: inline-block;
+      position: relative;
+      width: 100%;
+    }
+    .el-form-item {
+      margin-bottom: 12px;
+      .el-form-item__label {
+        font-weight: 400;
+        padding-right: 12px;
+      }
+      .el-select-dropdown__item,
+      .el-date-editor.el-input,
+      .el-input__inner {
+        width: 100%;
+        font-size: 12px;
+      }
+    }
+  }
+}
+.extra-btn {
+  margin-top: 10px;
+}
+.table-container {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  .el-table__body-wrapper.is-scrolling-none {
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: $main-white;
+      -webkit-border-radius: 2em;
+      -moz-border-radius: 2em;
+      border-radius: 2em;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $main-grey-lighter;
+      -webkit-border-radius: 2em;
+      -moz-border-radius: 2em;
+      border-radius: 2em;
+    }
+  }
+  .el-table {
+    tr th {
+      border-color: $table-header-bg;
+      background: $table-header-bg;
+      text-align: center;
+    }
+    tr td {
+      text-align: center;
+    }
+  }
+  .footer-pagination {
+    width: 100%;
+    margin: 15px 0 7px 0;
+    text-align: right;
+    display: flex;
+    justify-content: center;
+    // position: absolute;
+    .el-pagination__total {
+      margin-right: 50px;
+    }
+    .el-pagination__jump {
+      flex: 1;
+      text-align: right;
+    }
+    .el-pagination__sizes {
+      flex: 1;
+      text-align: left;
+    }
+  }
+}
+.base-form-group {
+  .el-form-item {
+    margin-bottom: 15px !important;
+    margin-right: 0 !important;
+    width: 100%;
+    .el-form-item__label {
+      font-weight: 400;
+      padding-right: 12px;
+      line-height: 35px;
+      font-size: 13px;
+    }
+    .el-form-item__content {
+      line-height: 35px;
+      .el-date-editor.el-input,
+      .el-date-editor.el-input__inner {
+        width: 100%;
+      }
+      .el-select {
+        width: 100%;
+        .el-form-item__label {
+          font-weight: 400;
+          padding-right: 12px;
+        }
+        .el-form-item__content {
+          line-height: 35px;
+          .el-select {
+            width: 100%;
+          }
+          .el-input__icon {
+            line-height: 35px;
+          }
+          .separator {
+            text-align: center;
+          }
+          .el-date-editor.el-input,
+          .el-textarea__inner {
+            font-size: 12px;
+            height: 80px;
+          }
+          .el-form-item__error {
+            padding: 0;
+            padding-top: 3px;
+          }
+        }
+      }
+    }
+  }
+}

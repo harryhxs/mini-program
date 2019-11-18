@@ -1,0 +1,106 @@
+@import './variables.scss';
+@import './mixin.scss';
+@import './transition.scss';
+@import './element-ui.scss';
+@import './sidebar.scss';
+@import './common.scss';
+
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  font-size: 12px;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: ' ';
+    clear: both;
+    height: 0;
+  }
+}
+
+// main-container global css
+.app-container {
+  padding: 20px;
+}
+
+/**
+box布局常用的一些class
+ */
+
+@mixin box-layout($all: false) {
+  $direction-list: top right bottom left;
+  $margin-prefix: 'margin';
+  $padding-prefix: 'padding';
+  $baseUnitNum: 4;
+  $baseUnitText: 'px';
+  @if $all {
+    @for $i from 1 through 10 {
+      //margin
+      .#{$margin-prefix}-#{$i*$baseUnitNum} {
+        #{$margin-prefix}: #{$i * $baseUnitNum}#{$baseUnitText} !important;
+      }
+      //padding
+      .#{$padding-prefix}-#{$i*$baseUnitNum} {
+        #{$padding-prefix}: #{$i * $baseUnitNum}#{$baseUnitText} !important;
+      }
+    }
+  } @else {
+    @each $directionItem in $direction-list {
+      @for $i from 1 through 20 {
+        //margin
+        .#{$margin-prefix}-#{$directionItem}-#{$i*$baseUnitNum} {
+          #{$margin-prefix}-#{$directionItem}: #{$i * $baseUnitNum}#{$baseUnitText} !important;
+        }
+        //padding
+        .#{$padding-prefix}-#{$directionItem}-#{$i*$baseUnitNum} {
+          #{$padding-prefix}-#{$directionItem}: #{$i * $baseUnitNum}#{$baseUnitText} !important;
+        }
+      }
+    }
+  }
+}
+@include box-layout(true);
+@include box-layout(false);
