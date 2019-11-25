@@ -12,6 +12,8 @@ const mutations = {
     state.token = token
   },
   SET_USER_INFO: (state, userInfo) => {
+    console.log('userInfo')
+    console.log(userInfo)
     state.userInfo = userInfo || {}
   }
 }
@@ -23,9 +25,12 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password })
         .then(response => {
+          console.log(11111)
           resolve(response)
         })
         .catch(error => {
+          console.log(2222)
+          console.log(error)
           reject(error)
         })
     })
@@ -34,9 +39,11 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token)
+      getInfo()
         .then(response => {
+          console.log(response)
           const { data } = response
+          console.log(data)
           if (!data) {
             reject('登录失败，请重新登录')
           }

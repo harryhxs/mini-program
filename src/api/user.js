@@ -11,8 +11,7 @@ export function login(data) {
 export function getInfo(token) {
   return request({
     url: '/user/getLoginInfo',
-    method: 'get',
-    params: { token }
+    method: 'get'
   })
 }
 
@@ -23,9 +22,10 @@ export function logout() {
   })
 }
 
-export function getUserList() {
+export function updatePassword(data) {
   return request({
-    url: '/user/logout',
-    method: 'post'
+    url: '/user/updatePassword',
+    method: 'post',
+    data
   })
 }

@@ -10,7 +10,7 @@
     >
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">欢迎登录</h3>
       </div>
 
       <el-form-item prop="username">
@@ -103,7 +103,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
+          this.$store.dispatch('user/login', this.loginForm).then(response => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {

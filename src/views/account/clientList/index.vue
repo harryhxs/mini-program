@@ -17,9 +17,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="用户名">
+            <el-form-item label="联系人">
               <el-input
-                v-model="form.name"
+                v-model="form.contactName"
                 placeholder="请输入用户名"
                 size="small"
               />
@@ -30,6 +30,7 @@
               <el-button
                 type="primary"
                 size="small"
+                @click="getData"
               >查询</el-button>
             </el-form-item>
           </el-col>
@@ -57,7 +58,7 @@
         </el-table-column>
         <el-table-column label="所在区域">
           <template slot-scope="scope">
-            <span>{{ scope.row.region }}</span>
+            <span>{{ scope.row.provinceName+scope.row.cityName+scope.row.districtName }}</span>
           </template>
         </el-table-column>
         <el-table-column label="授权人数">
@@ -67,7 +68,7 @@
         </el-table-column>
         <el-table-column label="联系手机">
           <template slot-scope="scope">
-            <span>{{ scope.row.moblie }}</span>
+            <span>{{ scope.row.mobile }}</span>
           </template>
         </el-table-column>
         <el-table-column label="联系人">
@@ -88,6 +89,7 @@
     <el-dialog
       title="修改授权信息"
       :visible.sync="dialogFormVisible"
+      :close-on-click-modal="false"
       width="600px"
     >
       <el-form
@@ -136,6 +138,7 @@
       <el-dialog
         title="新建客户"
         :visible.sync="clientShow"
+        :close-on-click-modal="false"
         width="800px"
       >
         <el-form
@@ -145,10 +148,17 @@
           label-width="100px"
         >
           <el-row>
+            <el-col :span="24">
+              <CitySelect
+                v-model="addressObj"
+                title="所在区域"
+                label-width="100px"
+              />
+            </el-col>
             <el-col :span="12">
               <el-form-item
                 label="客户名称"
-                prop="userNumber"
+                prop="name"
               >
                 <el-input
                   v-model="newForm.name"
@@ -187,7 +197,7 @@
                 prop="endTime"
               >
                 <el-date-picker
-                  v-model="editForm.endTime"
+                  v-model="newForm.endTime"
                   style="width: 100%;"
                   type="date"
                   size="small"
@@ -202,7 +212,7 @@
                 prop="userNumber"
               >
                 <el-input
-                  v-model="editForm.userNumber"
+                  v-model="newForm.userNumber"
                   placeholder="请输入授权人数"
                   size="small"
                 />
@@ -214,8 +224,8 @@
                 prop="remark"
               >
                 <el-input
-                  v-model="editForm.remark"
-                  placeholder="请输入授权人数"
+                  v-model="newForm.remark"
+                  placeholder="请输备注"
                   size="small"
                 />
               </el-form-item>
@@ -238,9 +248,11 @@
 </template>
 
 <script>
+import { createClient, getClientList, updateEndTime } from '@/api/client'
+import CitySelect from '@/components/CitySelect'
 export default {
   components: {
-
+    CitySelect
   },
   props: {
 
@@ -249,11 +261,21 @@ export default {
     return {
       form: {
         mobile: '',
-        name: ''
+        contactName: ''
       },
       editForm: {
         endTime: '',
-        userNumber: ''
+        userNumber: '',
+        id: ''
+      },
+      addressObj: {
+        provinceCode: '',
+        provinceName: '',
+        cityCode: '',
+        cityName: '',
+        districtCode: '',
+        districtName: '',
+        address: ''
       },
       rules: {
         endTime: [
@@ -276,7 +298,8 @@ export default {
           { required: true, message: '请输入名称', trigger: 'blur' }
         ],
         mobile: [
-          { required: true, message: '请输入手机号', trigger: 'blur' }
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { pattern: /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/, message: '请输入正确的手机号码', trigger: 'blur' }
         ],
         contactName: [
           { required: true, message: '请输入联系人', trigger: 'blur' }
@@ -285,7 +308,8 @@ export default {
           { required: true, message: '请选择结束时间', trigger: 'change' }
         ],
         userNumber: [
-          { required: true, message: '请输入授权人数', trigger: 'blur' }
+          { required: true, message: '请输入授权人数', trigger: 'blur' },
+          { pattern: /^[1-9]\d*$/, message: '请输入数字', trigger: 'blur' }
         ]
       },
       tableData: [],
@@ -304,24 +328,30 @@ export default {
   },
   methods: {
     getData() {
-      this.tableData.push({
-        createTime: '2019-11-16 14:45:00',
-        endTime: 1573896415438,
-        region: '巴中县',
-        userNumber: 10,
-        moblie: '17783136888',
-        contactName: '小兰'
+      let params = { ...this.form }
+      getClientList(params).then(res => {
+        if (res && res.data) {
+          this.tableData = res.data.list || []
+        }
       })
     },
     editTime(row) {
       this.editForm.endTime = row.endTime
       this.editForm.userNumber = row.userNumber
+      this.editForm.id = row.id
       this.dialogFormVisible = true
     },
     updateInfo() {
       this.$refs.editForm.validate(valid => {
         if (valid) {
-          this.dialogFormVisible = false
+          let params = { ... this.editForm }
+          updateEndTime(params).then(res => {
+            if (res && res.data) {
+              this.getData()
+              this.$message.success('修改用户成功', '提示')
+              this.dialogFormVisible = false
+            }
+          })
         }
       })
     },
@@ -329,6 +359,14 @@ export default {
       this.$refs.newForm.validate(valid => {
         if (valid) {
           this.clientShow = false
+          let params = { ...this.newForm, ...this.addressObj }
+          createClient(params).then(res => {
+            if (res && res.data) {
+              this.$message.success('创建用户成功', '提示')
+              this.getData()
+              this.clientShow = false
+            }
+          })
         }
       })
     }

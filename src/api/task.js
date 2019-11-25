@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getTaskList(data) {
   return request({
-    url: '/user/login',
+    url: '/landInspect/fuzzyQueryLandInspectList',
     method: 'post',
     data
   })

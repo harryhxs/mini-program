@@ -162,7 +162,7 @@ export default {
 
   },
   created() {
-
+    this.getData()
   },
   methods: {
     getData() {
@@ -172,7 +172,9 @@ export default {
         search: this.form
       }
       getTaskList(params).then(res => {
-
+        if (res && res.data) {
+          this.tableData = res.data || []
+        }
       })
     },
     createNew() {

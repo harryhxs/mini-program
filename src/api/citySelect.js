@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
-export function getCitySelectList(data) {
+export function getCitySelectList(params) {
   return request({
-    url: '/user/login',
-    method: 'post',
-    data
+    url: '/area/list',
+    method: 'get',
+    params
   })
 }

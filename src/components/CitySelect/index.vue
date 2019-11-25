@@ -107,11 +107,8 @@
 
 <script>
 import { getCitySelectList } from '@/api/citySelect'
-Promise
-
 export default {
-  components: {
-  },
+  name: 'CitySelect',
   props: {
     address: {
       type: Object,
@@ -137,11 +134,7 @@ export default {
     },
     size: {
       type: String,
-      default: ''
-    },
-    ruleItem: {
-      type: String,
-      default: ''
+      default: 'small'
     },
     title: {
       type: String,
@@ -170,13 +163,13 @@ export default {
     return {
       rulesEnterprise: {
         provinceCode: [
-          { required: true, message: '请选择', trigger: 'change' }
+          { required: true, message: '请选择', trigger: 'blur' }
         ],
         cityCode: [
-          { required: true, message: '请选择', trigger: 'change' }
+          { required: true, message: '请选择', trigger: 'blur' }
         ],
         districtCode: [
-          { required: true, message: '请选择', trigger: 'change' }
+          { required: true, message: '请选择', trigger: 'blur' }
         ],
         address: [
           { required: true, message: '详细地址不能为空', trigger: 'change' },
@@ -196,26 +189,15 @@ export default {
   },
   watch: {
     value(val, oldval) {
-      console.log('val', val)
-      this.addressObj = val || {}
-      if (this.addressObj.districtCode === '') {
-        this.addressObj['areaId'] = ''
-      }
-      if (this.addressObj.cityCode === '') {
-        this.addressObj['areaId'] = ''
-        this.addressObj['cityId'] = ''
-      }
-      if (this.addressObj.cityCode && this.addressObj.districtCode) {
+      this.city = []
+      this.area = []
+      if (val.provinceCode) {
         this.checkSelectValue('province')
+      }
+      if (val.cityCode) {
         this.checkSelectValue('city')
       }
-      if (this.addressObj.provinceCode === '') {
-        this.city = []
-        this.area = []
-        this.addressObj['areaId'] = ''
-        this.addressObj['cityId'] = ''
-        this.addressObj['provinceId'] = ''
-      }
+      this.addressObj = val || {}
     }
   },
   mounted() {
@@ -245,61 +227,41 @@ export default {
       obj.districtCode = districtCode || ''
       return { ...v, ...obj }
     },
-    changeValue(obj, key1, key2) {
-      obj.map((item) => {
-        if (this.addressObj[key1] === item[key1]) {
-          this.addressObj[key2] = item[key2]
-        }
-        return item
-      })
-    },
     changeSelect(type) {
       this.addressObj['id'] = ''
       if (type === 'province') {
-        this.changeValue(this.province, 'provinceCode', 'provinceName')
         this.addressObj.cityCode = ''
         this.addressObj.districtCode = ''
-        const result = this.province.find((item) => {
-          return item.provinceCode === this.addressObj.provinceCode
-        })
+        this.addressObj.cityName = ''
+        this.addressObj.districtName = ''
+        const result = this.province.find(item => item.provinceCode === this.addressObj.provinceCode)
         if (result) {
-          this.addressObj['id'] = result.id
-          this.addressObj['provinceId'] = result.id
+          this.addressObj['provinceName'] = result.provinceName
         }
       }
       if (type === 'city') {
-        this.changeValue(this.city, 'cityCode', 'cityName')
         this.addressObj.districtCode = ''
-        const result = this.city.find((item) => {
-          return item.cityCode === this.addressObj.cityCode
-        })
+        this.addressObj.districtName = ''
+        const result = this.city.find(item => item.cityCode === this.addressObj.cityCode)
         if (result) {
-          this.addressObj['id'] = result.id
-          this.addressObj['cityId'] = result.id
+          this.addressObj['cityName'] = result.cityName
         }
       }
       if (type === 'area') {
-        const result = this.area.find((item) => {
-          return item.districtCode === this.addressObj.districtCode
-        })
+        const result = this.area.find(item => item.districtCode === this.addressObj.districtCode)
         if (result) {
-          this.addressObj.id = result.id
-          this.addressObj['areaId'] = result.id
+          this.addressObj['districtName'] = result.districtName
         }
-
-        this.changeValue(this.area, 'districtCode', 'districtName')
       }
       // 查询城市下拉框联动
-      if (type === 'province' && this.addressObj.provinceCode) {
-        this.checkSelectValue('province')
-      } else if (type === 'province' && !this.addressObj.provinceCode) {
-        this.city = []
-        this.area = []
+      if (!this.addressObj.provinceCode && !this.addressObj.cityCode) {
+        return
       }
-      if (type === 'city' && this.addressObj.provinceCode && this.addressObj.cityCode) {
+      if (type === 'province') {
+        this.checkSelectValue('province')
+      }
+      if (type === 'city') {
         this.checkSelectValue('city')
-      } else if (type === 'city' && !this.addressObj.cityCode) {
-        this.area = []
       }
       this.$emit('change', this.address)
     },
@@ -324,7 +286,6 @@ export default {
             this.area = response.data
           }
         }
-      }).catch(() => {
       })
     },
     submitTest() {
