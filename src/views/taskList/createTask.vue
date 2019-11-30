@@ -25,11 +25,23 @@
             label="被指派人"
             prop="assinger"
           >
-            <el-input
-              v-model="form.assinger"
+            <el-select
+              v-model="form.assigner"
+              filterable
               size="small"
-              placeholder="请输入任务名"
-            />
+              remote
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="remoteMethod"
+              :loading="loading"
+            >
+              <el-option
+                v-for="item in userList"
+                :key="item.id"
+                :label="item.realName"
+                :value="item.id + ',' + item.realName"
+              />
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -65,68 +77,145 @@
         <el-col :span="20">
           <el-form-item
             label="所在地区"
-            prop="address"
             required
           >
-            <el-cascader
-              v-model="address"
+            <el-row
+              :gutter="20"
+              type="flex"
+            >
+              <el-col :span="8">
+                <el-input
+                  v-model="sendPointObj.provinceName"
+                  size="small"
+                  disabled
+                />
+              </el-col>
+              <el-col :span="8">
+                <el-input
+                  v-model="sendPointObj.cityName"
+                  size="small"
+                  disabled
+                />
+              </el-col>
+              <el-col :span="8">
+                <el-input
+                  v-model="sendPointObj.districtName"
+                  size="small"
+                  disabled
+                />
+              </el-col>
+            </el-row>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item
+            label="开始地址"
+            prop="startPoint"
+          >
+            <el-select
+              v-model="form.startPoint"
+              filterable
+              remote
               size="small"
-              style="width: 100%;"
-              clearable
-              :props="options"
-              @change="getAddress"
-            />
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="autoCompleteStart"
+              :loading="loading"
+              @change="changeStart"
+            >
+              <el-option
+                v-for="(item, idx) in startOptions"
+                :key="idx"
+                :label="item.name"
+                :value="item.location.lng + ',' + item.location.lat"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item
+            label="结束地址"
+            prop="endPoint"
+          >
+            <el-select
+              v-model="form.endPoint"
+              filterable
+              remote
+              size="small"
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="autoCompleteEnd"
+              :loading="loading"
+              @change="changeEnd"
+            >
+              <el-option
+                v-for="(item, idx) in endOptions"
+                :key="idx"
+                :label="item.name"
+                :value="item.location.lng + ',' + item.location.lat"
+              />
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
-    <div
-      id="container"
-      class="margin-top-12"
-      style="width: 100%; height: 400px;"
-    />
+    <el-row>
+      <el-col :span="20">
+        <div
+          id="container"
+          class="margin-top-12"
+          style="width: 100%; height: 350px;"
+        />
+      </el-col>
+      <el-col :span="20">
+        <div class="text-center margin-top-40">
+          <el-button
+            style="width: 200px;"
+            type="danger"
+            @click="submitData"
+          >提交</el-button>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import AMap from 'AMap'
-let id = 0
-let validateAddress = (rule, value, callback) => {
-  debugger
-  if (!value || value.length == 0) {
-    callback(new Error('请选择省市区'))
-  } else {
-    callback()
-  }
-}
+import AMapUI from 'AMapUI'
+import { getCustomerInfo, creatTask, getUserList } from '@/api/customer'
 export default {
   components: {
-
   },
   props: {
 
   },
   data() {
     return {
+      detailMap: {},
       form: {
         title: '',
-        assinger: '',
+        assingerName: '',
         beginTime: '',
         expireTime: '',
-        addressDTO: {
-
-        },
         startPointName: '',
         endPointName: '',
         startPoint: '',
-        endPoint: ''
+        endPoint: '',
+        assigner: '',
+        inspectType: 1
       },
+      userList: [],
       address: [],
+      startOptions: [],
+      endOptions: [],
+      sendPointObj: {},
+      loading: false,
       rules: {
         title: [
           { required: true, message: '请输入任务名', trigger: 'blur' }
         ],
-        assinger: [
+        assigner: [
           { required: true, message: '请输入被指派人', trigger: 'blur' }
         ],
         beginTime: [
@@ -135,25 +224,12 @@ export default {
         expireTime: [
           { required: true, message: '请选择结束时间', trigger: 'blur' }
         ],
-        address: [
-          { validator: validateAddress, trigger: 'change' }
+        startPoint: [
+          { required: true, message: '请选择任务开始点', trigger: 'blur' }
+        ],
+        endPoint: [
+          { required: true, message: '请选择任务节点', trigger: 'blur' }
         ]
-      },
-      options: {
-        lazy: true,
-        lazyLoad(node, resolve) {
-          const { level } = node
-          setTimeout(() => {
-            const nodes = Array.from({ length: level + 1 })
-              .map(item => ({
-                value: ++id,
-                label: `选项${id}`,
-                leaf: level >= 2
-              }))
-            // 通过调用resolve将子节点数据返回，通知组件数据加载完成
-            resolve(nodes)
-          }, 1000)
-        }
       }
     }
   },
@@ -164,22 +240,175 @@ export default {
 
   },
   mounted() {
-    this.init()
+    getCustomerInfo().then(res => {
+      if (res && res.data) {
+        this.sendPointObj = res.data || {}
+        this.init()
+      }
+    })
   },
   methods: {
     init() {
-      let map = new AMap.Map('container', {
-        center: [116.397428, 39.90923],
+      let _this = this
+      _this.detailMap = new AMap.Map('container', {
+        center: _this.sendPointObj.districtCoordinate.split(','),
         resizeEnable: true,
-        zoom: 10
+        zoom: 14
       })
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
-        map.addControl(new AMap.ToolBar())
-        map.addControl(new AMap.Scale())
+      _this.detailMap.on('complete', () => {
+        AMapUI.loadUI(['control/BasicControl'], (BasicControl) => {
+          const layerCtrl = new BasicControl.LayerSwitcher({
+            position: 'tr'
+          })
+          _this.detailMap.addControl(layerCtrl)
+        })
+        AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.OverView', 'AMap.MapType', 'AMap.Geolocation'], () => {
+          // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
+          _this.detailMap.addControl(new AMap.ToolBar())
+
+          // 在图面添加比例尺控件，展示地图在当前层级和纬度下的比例尺
+          _this.detailMap.addControl(new AMap.Scale())
+
+          // 在图面添加鹰眼控件，在地图右下角显示地图的缩略图
+          _this.detailMap.addControl(new AMap.OverView({ isOpen: true }))
+
+          // 在图面添加类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+          // this.detailMap.addControl(new AMap.MapType())
+
+          // 在图面添加定位控件，用来获取和展示用户主机所在的经纬度位置
+          // this.detailMap.addControl(new AMap.Geolocation())
+        })
       })
     },
     getAddress() {
       console.log(this.address)
+    },
+    autoCompleteStart(query) {
+      let _this = this
+      AMap.plugin('AMap.Autocomplete', function() {
+        // 实例化Autocomplete
+        var autoOptions = {
+          // city 限定城市，默认全国
+          city: '重庆'
+        }
+        var autoComplete = new AMap.Autocomplete(autoOptions)
+        autoComplete.search(query, function(status, result) {
+          // 搜索成功时，result即是对应的匹配数据
+          console.log('result')
+          console.log(result)
+          if (result.info == 'OK') {
+            _this.startOptions = result.tips || []
+          }
+        })
+      })
+    },
+    autoCompleteEnd(query) {
+      let _this = this
+      AMap.plugin('AMap.Autocomplete', function() {
+        // 实例化Autocomplete
+        var autoOptions = {
+          // city 限定城市，默认全国
+          city: _this.sendPointObj.provinceName + _this.sendPointObj.cityName + _this.sendPointObj.districtName
+        }
+        var autoComplete = new AMap.Autocomplete(autoOptions)
+        autoComplete.search(query, function(status, result) {
+          // 搜索成功时，result即是对应的匹配数据
+          if (result.info == 'OK') {
+            _this.endOptions = result.tips || []
+          }
+        })
+      })
+    },
+    getPolyline() {
+      if (!this.form.startPoint || !this.form.endPoint) {
+        return
+      }
+      let _this = this
+      let start = _this.form.startPoint.split(',')[0]
+      let end = _this.form.endPoint.split(',')
+      console.log(start)
+      console.log(end)
+      let path = [
+        [Number(start[0]), Number(start[1])],
+        [Number(end[0]), Number(end[1])]
+      ]
+      var polyline = new AMap.Polyline({
+        path: path,
+        showDir: true,
+        strokeColor: 'green',
+        strokeWeight: 10
+      })
+      this.detailMap.add(polyline)
+      // 缩放地图到合适的视野级别
+      this.detailMap.setFitView()
+    },
+    getAddressBy(location, type) {
+      let _this = this
+      AMap.plugin('AMap.Geocoder', function() {
+        var geocoder = new AMap.Geocoder({
+          // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
+          city: '010'
+        })
+        var lnglat = location ? location.split(',') : []
+        console.log(lnglat)
+
+        geocoder.getAddress(lnglat, function(status, result) {
+          if (status === 'complete' && result.info === 'OK') {
+            // result为对应的地理位置详细信息
+            console.log(result)
+            if (type == 'start') {
+              _this.form.startPointName = result.regeocode.formattedAddress
+            } else {
+              _this.form.endPointName = result.regeocode.formattedAddress
+            }
+          }
+        })
+      })
+    },
+    changeStart(val) {
+      this.getAddressBy(val, 'start')
+      // this.getPolyline()
+    },
+    changeEnd(val) {
+      this.getAddressBy(val, 'end')
+      // this.getPolyline()
+    },
+    onChange(val) {
+      console.log('---val---')
+      console.log(this.sendPointObj)
+    },
+    remoteMethod(query) {
+      if (query) {
+        this.loading = true
+        let params = {
+          pageSize: 999,
+          pageNum: 1,
+          search: {
+            realName: query
+          }
+        }
+        getUserList(params).then(res => {
+          this.loading = false
+          if (res && res.data) {
+            this.userList = res.data.list || []
+          }
+        }).catch(() => {
+          this.loading = false
+        })
+      }
+    },
+    submitData() {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          this.form.assignerName = this.form.assigner.split(',')[1]
+          this.form.assignerId = this.form.assigner.split(',')[0]
+          creatTask(this.form).then(res => {
+            if (res && res.data) {
+              this.$message.success('创建任务成功')
+            }
+          })
+        }
+      })
     }
   }
 }

@@ -1,16 +1,17 @@
-@import './variables.scss';
-@import './mixin.scss';
-@import './transition.scss';
-@import './element-ui.scss';
-@import './sidebar.scss';
-@import './common.scss';
+@import "./variables.scss";
+@import "./mixin.scss";
+@import "./transition.scss";
+@import "./element-ui.scss";
+@import "./sidebar.scss";
+@import "./common.scss";
 
 body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+    Microsoft YaHei, Arial, sans-serif;
   font-size: 12px;
 }
 
@@ -55,7 +56,7 @@ div:focus {
     visibility: hidden;
     display: block;
     font-size: 0;
-    content: ' ';
+    content: " ";
     clear: both;
     height: 0;
   }
@@ -72,10 +73,10 @@ box布局常用的一些class
 
 @mixin box-layout($all: false) {
   $direction-list: top right bottom left;
-  $margin-prefix: 'margin';
-  $padding-prefix: 'padding';
+  $margin-prefix: "margin";
+  $padding-prefix: "padding";
   $baseUnitNum: 4;
-  $baseUnitText: 'px';
+  $baseUnitText: "px";
   @if $all {
     @for $i from 1 through 10 {
       //margin
@@ -92,11 +93,13 @@ box布局常用的一些class
       @for $i from 1 through 20 {
         //margin
         .#{$margin-prefix}-#{$directionItem}-#{$i*$baseUnitNum} {
-          #{$margin-prefix}-#{$directionItem}: #{$i * $baseUnitNum}#{$baseUnitText} !important;
+          #{$margin-prefix}-#{$directionItem}: #{$i *
+            $baseUnitNum}#{$baseUnitText} !important;
         }
         //padding
         .#{$padding-prefix}-#{$directionItem}-#{$i*$baseUnitNum} {
-          #{$padding-prefix}-#{$directionItem}: #{$i * $baseUnitNum}#{$baseUnitText} !important;
+          #{$padding-prefix}-#{$directionItem}: #{$i *
+            $baseUnitNum}#{$baseUnitText} !important;
         }
       }
     }
@@ -104,3 +107,18 @@ box布局常用的一些class
 }
 @include box-layout(true);
 @include box-layout(false);
+
+.el-table__empty-block {
+  background: url("~@/assets/noData.png") no-repeat;
+  background-size: 100px;
+  background-position: center calc(50% - 20px);
+  height: 100%;
+  min-height: 200px;
+  // border: 1px solid #ebeef5;
+  border-top: none;
+
+  .el-table__empty-text {
+    line-height: 15px;
+    margin-top: 65px;
+  }
+}

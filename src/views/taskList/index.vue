@@ -10,7 +10,7 @@
           <el-col :span="6">
             <el-form-item label="被指派人">
               <el-input
-                v-model="form.assigner"
+                v-model="form.assignerName"
                 placeholder="请输入被指派人姓名"
                 size="small"
               />
@@ -78,14 +78,14 @@
         </el-table-column>
         <el-table-column label="被指派人">
           <template slot-scope="scope">
-            <span>{{ scope.row.assinger }}</span>
+            <span>{{ scope.row.assignerName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="联系手机">
+        <!-- <el-table-column label="联系手机">
           <template slot-scope="scope">
             <span>{{ scope.row.moblie }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="创建时间">
           <template slot-scope="scope">
             <span>{{ scope.row.createTime | dateFormat('date') }}</span>
@@ -173,7 +173,7 @@ export default {
       }
       getTaskList(params).then(res => {
         if (res && res.data) {
-          this.tableData = res.data || []
+          this.tableData = res.data.list || []
         }
       })
     },

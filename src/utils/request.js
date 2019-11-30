@@ -26,11 +26,11 @@ const RETURN_CODE_HANDLER = {
   },
   '404': function(response) { },
   '500': function(response) {
-    Message({
-      message: response.message || '服务器错误',
-      type: 'error',
-      duration: 5 * 1000
-    })
+    // Message({
+    //   message: response.message || '服务器错误',
+    //   type: 'error',
+    //   duration: 5 * 1000
+    // })
   }
 }
 // create an axios instance

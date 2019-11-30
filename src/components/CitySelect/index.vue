@@ -122,7 +122,7 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: true
     },
     showAddress: {
       type: String,
@@ -193,11 +193,10 @@ export default {
       this.area = []
       if (val.provinceCode) {
         this.checkSelectValue('province')
+        if (val.cityCode) {
+          this.checkSelectValue('city')
+        }
       }
-      if (val.cityCode) {
-        this.checkSelectValue('city')
-      }
-      this.addressObj = val || {}
     }
   },
   mounted() {
