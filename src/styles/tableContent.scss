@@ -1,0 +1,190 @@
+@import './variables.scss';
+
+/* 通过CSS样式改变element table 表头样式 */
+
+.etc-table-wraper {
+  .el-table__body-wrapper.is-scrolling-none {
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: $main-white;
+      -webkit-border-radius: 2em;
+      -moz-border-radius: 2em;
+      border-radius: 2em;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $main-grey-lighter;
+      -webkit-border-radius: 2em;
+      -moz-border-radius: 2em;
+      border-radius: 2em;
+    }
+  }
+
+  // 多选框，添加全选之后的样式
+  .el-table-column--selection .cell {
+    padding-left: 10px !important;
+    padding-right: 0px !important;
+    text-align: left !important;
+  }
+
+  th,
+  td {
+    div.cell {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      text-align: center;
+    }
+  }
+
+  th {
+    height: 50px;
+    line-height: 50px;
+  }
+
+  .el-table {
+    border-top: none;
+
+    .el-table__header-wrapper {
+      background: $table-header-bg;
+
+      tr th {
+        border-color: $table-header-bg;
+        background: $table-header-bg;
+        padding: 0 2px;
+        position: relative;
+        z-index: 0; // 设置固定列需要的样式
+
+        &:not(:nth-last-child(2)) {
+          div.cell {
+            padding: 0;
+          }
+
+          padding-right: 10px;
+          padding-left: 7px;
+
+          &::after {
+            content: '';
+            display: inline-block;
+            height: 18px;
+            width: 3px;
+            background: url('~@/assets/table_divider.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            z-index: 999;
+            transform: translateY(-50%);
+          }
+        }
+      }
+
+      th.el-table-column--selection {
+        padding: 0 !important;
+
+        // 多选框，添加全选之后的样式
+        div.cell {
+          // padding: 0 10px !important;
+          padding-left: 10px !important;
+          padding-right: 0px !important;
+          text-align: left !important;
+
+          &::after {
+            content: '全选';
+            padding-left: 4px;
+          }
+        }
+
+        &::after {
+          content: '';
+          background: unset !important; // BUG 1274s
+        }
+      }
+
+      // 手动隐藏末尾扩展符
+      .no-after-th {
+        padding: 0 !important;
+
+        &::after {
+          content: '';
+          background: unset !important; // BUG 1274s
+        }
+      }
+
+      // 手动显示末尾扩展符
+      .have-after-th {
+        &::after {
+          content: '';
+          display: inline-block;
+          height: 18px;
+          width: 3px;
+          background: url('~@/assets/table_divider.png');
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+          position: absolute;
+          right: 0;
+          top: 50%;
+          z-index: 999;
+          transform: translateY(-50%);
+        }
+      }
+    }
+
+    .el-table__body-wrapper {
+      tbody {
+        tr>td {
+          border-right: none;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+// 表格内容整体统一样式
+.table-content-style {
+  .table-top-button-style {
+    margin-bottom: 15px;
+  }
+
+  // 表格最后一列处理按钮的样式
+  .last-button {
+    padding: 5px;
+    cursor: pointer;
+
+    &:hover {
+      color: $main-red;
+    }
+  }
+
+  .el-table--striped .el-table__body tr.el-table__row--striped td {
+    background: $page-background-light;
+  }
+
+  .el-table--enable-row-transition .el-table__body td {
+    height: 37px;
+    line-height: 37px;
+    padding: 0px;
+    font-size: 12px;
+  }
+}
+
+/* 表格数据为空时展示 */
+.el-table__empty-block {
+  background: url('~@/assets/noData.png') no-repeat;
+  background-size: 100px;
+  background-position: center calc(50% - 20px);
+  height: 100%;
+  min-height: 200px;
+  // border: 1px solid #ebeef5;
+  border-top: none;
+
+  .el-table__empty-text {
+    line-height: 15px;
+    margin-top: 65px;
+  }
+}

@@ -36,7 +36,7 @@
         ref="editForm"
         :model="editForm"
         :rules="rules"
-        label-width="80px"
+        label-width="70px"
       >
         <el-form-item
           label="旧密码"

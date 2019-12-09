@@ -2,40 +2,29 @@
 <template>
   <div class="page-content">
     <div class="search-box">
-      <el-form
-        :model="form"
-        label-width="80px"
+      <TableSearch
+        label-width="70px"
+        @toOperate="getData"
       >
-        <el-row :gutter="20">
-          <el-col :span="6">
-            <el-form-item label="手机号">
-              <el-input
-                v-model="form.mobile"
-                placeholder="请输入手机号"
-                size="small"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="联系人">
-              <el-input
-                v-model="form.contactName"
-                placeholder="请输入用户名"
-                size="small"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label-width="0">
-              <el-button
-                type="primary"
-                size="small"
-                @click="getData"
-              >查询</el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+        <el-col :span="6">
+          <el-form-item label="手机号">
+            <el-input
+              v-model="form.mobile"
+              placeholder="请输入手机号"
+              size="small"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="联系人">
+            <el-input
+              v-model="form.contactName"
+              placeholder="请输入用户名"
+              size="small"
+            />
+          </el-form-item>
+        </el-col>
+      </TableSearch>
     </div>
     <div class="extra-btn">
       <el-button
@@ -44,8 +33,11 @@
         @click="clientShow = true"
       >新建</el-button>
     </div>
-    <div class="table-container">
-      <el-table :data="tableData">
+    <div class="table-container etc-table-wraper">
+      <el-table
+        :data="tableData"
+        border
+      >
         <el-table-column label="创建时间">
           <template slot-scope="scope">
             <span>{{ scope.row.createTime | dateFormat('date') }}</span>
@@ -96,7 +88,7 @@
         ref="editForm"
         :model="editForm"
         :rules="rules"
-        label-width="80px"
+        label-width="70px"
       >
         <el-form-item
           label="到期时间"
@@ -151,6 +143,7 @@
             <el-col :span="24">
               <CitySelect
                 v-model="addressObj"
+                :disabled="false"
                 title="所在区域"
                 label-width="100px"
               />
@@ -250,9 +243,11 @@
 <script>
 import { createClient, getClientList, updateEndTime } from '@/api/client'
 import CitySelect from '@/components/CitySelect'
+import TableSearch from '@/components/TableSearch/index'
 export default {
   components: {
-    CitySelect
+    CitySelect,
+    TableSearch
   },
   props: {
 

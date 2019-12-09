@@ -122,7 +122,7 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: true
+      default: false
     },
     showAddress: {
       type: String,
@@ -311,5 +311,8 @@ export default {
   right: -240px;
   top: 0px;
   width: 224px;
+}
+.el-form-item .el-form-item {
+  margin-bottom: 0 !important;
 }
 </style>

@@ -1,6 +1,5 @@
 module.exports = {
-
-  title: '智能巡查平台',
+  title: "智能巡检平台",
 
   /**
    * @type {boolean} true | false
@@ -13,4 +12,4 @@ module.exports = {
    * @description Whether show the logo in sidebar
    */
   sidebarLogo: false
-}
+};

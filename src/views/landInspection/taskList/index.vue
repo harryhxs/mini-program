@@ -2,65 +2,57 @@
 <template>
   <div class="page-content">
     <div class="search-box">
-      <el-form
-        :model="form"
-        label-width="80px"
+      <TableSearch
+        label-width="70px"
+        @toOperate="getData"
       >
-        <el-row :gutter="20">
-          <el-col :span="6">
-            <el-form-item label="被指派人">
-              <el-input
-                v-model="form.assignerName"
-                placeholder="请输入被指派人姓名"
-                size="small"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="任务名">
-              <el-input
-                v-model="form.title"
-                placeholder="请输入任务名"
-                size="small"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="开始时间">
-              <el-date-picker
-                v-model="form.beginTime"
-                style="width: 100%;"
-                type="date"
-                size="small"
-                value-format="timestamp"
-                placeholder="请选择任务开始时间"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="截止时间">
-              <el-date-picker
-                v-model="form.expireTime"
-                style="width: 100%;"
-                type="date"
-                size="small"
-                value-format="timestamp"
-                placeholder="请选择任务截止时间"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col
-            :span="24"
-            style="text-align: right; margin-bottom: 10px;"
-          >
-            <el-button
-              type="primary"
+        <el-col :span="6">
+          <el-form-item label="被指派人">
+            <el-input
+              v-model="form.assignerName"
+              placeholder="请输入被指派人姓名"
+              clearable
               size="small"
-              @click="getData"
-            >查询</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="任务名">
+            <el-input
+              v-model="form.title"
+              placeholder="请输入任务名"
+              clearable
+              size="small"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="开始时间">
+            <el-date-picker
+              v-model="form.beginTime"
+              style="width: 100%;"
+              type="date"
+              clearable
+              size="small"
+              value-format="timestamp"
+              placeholder="请选择任务开始时间"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="截止时间">
+            <el-date-picker
+              v-model="form.expireTime"
+              style="width: 100%;"
+              type="date"
+              size="small"
+              clearable
+              value-format="timestamp"
+              placeholder="请选择任务截止时间"
+            />
+          </el-form-item>
+        </el-col>
+      </TableSearch>
     </div>
     <div class="extra-btn">
       <el-button
@@ -69,8 +61,16 @@
         @click="createNew"
       >新建</el-button>
     </div>
-    <div class="table-container">
-      <el-table :data="tableData">
+    <div class="table-container etc-table-wraper">
+      <el-table
+        :data="tableData"
+        border
+      >
+        <el-table-column label="巡检任务ID">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="任务名称">
           <template slot-scope="scope">
             <span>{{ scope.row.title }}</span>
@@ -99,7 +99,6 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <span
-              v-if="scope.row.approvalStatus == 0"
               class="e-text-link margin-right-4"
               @click="viewDetail(scope.row)"
             >查看</span>
@@ -109,7 +108,6 @@
               @click="deleteTask(scope.row)"
             >删除</span>
             <span
-              v-if="scope.row.approvalStatus == 0"
               class="e-text-link"
               @click="editTask(scope.row)"
             >编辑</span>
@@ -134,9 +132,10 @@
 
 <script>
 import { getTaskList } from '@/api/task'
+import TableSearch from '@/components/TableSearch/index'
 export default {
   components: {
-
+    TableSearch
   },
   props: {
 
@@ -165,7 +164,19 @@ export default {
     this.getData()
   },
   methods: {
-    getData() {
+    toOperateBottom() {
+      // 搜索
+    },
+    getData(v) {
+      if (v === 'reset') {
+        this.form = {
+          assigner: '',
+          title: '',
+          beginTime: '',
+          expireTime: ''
+        }
+        return
+      }
       let params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
@@ -178,7 +189,7 @@ export default {
       })
     },
     createNew() {
-      this.$router.push('/inspection_task/create')
+      this.$router.push('/inspection_task/add_task')
     },
     handleSizeChange(value) {
       this.pageSize = value
@@ -188,23 +199,23 @@ export default {
     },
     getStatusName(status) {
       if (status == '1') {
-        return '巡查发布'
+        return '巡检发布'
       } else if (status == '2') {
-        return '巡查中'
+        return '巡检中'
       } else if (status == '3') {
-        return '巡查暂停'
+        return '巡检暂停'
       } else {
-        return '巡查结束'
+        return '巡检结束'
       }
     },
     viewDetail(row) {
-
+      this.$router.push({ path: '/inspection_task/task_details', query: { id: row.id } })
     },
     deleteTask(row) {
 
     },
     editTask(row) {
-
+      this.$router.push({ path: '/inspection_task/task_edit', query: { id: row.id } })
     }
   }
 }

@@ -85,22 +85,27 @@ $table-header-bg: #f3f3f3;
 .e-text-link {
   color: $main-blue;
   @extend %link;
+
   &:hover {
     color: $main-red;
   }
+
   &:focus {
     color: $main-blue-middle;
   }
+
   &-red,
   &-red:hover {
     @extend %link;
     color: $main-red;
   }
+
   &-grey,
   &-grey:hover {
     @extend %link;
     color: $main-black-lighter;
   }
+
   &-white,
   &-white:hover {
     @extend %link;
@@ -182,31 +187,37 @@ $table-header-bg: #f3f3f3;
   text-align: right;
   display: flex;
   justify-content: center;
+
   // position: absolute;
   .el-pagination__total {
     margin-right: 50px;
   }
+
   .el-pagination__jump {
     flex: 1;
     text-align: right;
   }
+
   .el-pagination__sizes {
     flex: 1;
     text-align: left;
   }
 }
+
 /** 滚动条优化 **/
 
 .better-scroll-bar {
   &::-webkit-scrollbar {
     width: 8px;
   }
+
   &::-webkit-scrollbar-track {
     background-color: $main-white;
     -webkit-border-radius: 2em;
     -moz-border-radius: 2em;
     border-radius: 2em;
   }
+
   &::-webkit-scrollbar-thumb {
     background-color: $main-grey-lighter;
     -webkit-border-radius: 2em;
@@ -230,49 +241,62 @@ $table-header-bg: #f3f3f3;
   height: 100%;
   padding: 10px 20px;
 }
+
 .search-box {
-  border-bottom: 2px solid $main-grey-light;
+
+  // border-bottom: 2px solid $main-grey-light;
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
     width: 100%;
   }
+
   .el-input__icon {
     width: 25px;
     text-align: center;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
   }
+
   .el-select-dropdown__item {
     font-size: 12px !important;
   }
+
   .el-select {
     display: inline-block;
     position: relative;
     width: 100%;
   }
+
   .el-form-item {
     &.address-content {
       margin-bottom: 0 !important;
     }
+
     margin-bottom: 12px;
+
     .el-form-item__label {
       font-weight: 400;
       padding-right: 12px;
     }
+
     .el-select-dropdown__item {
       font-size: 12px !important;
     }
+
     .el-select {
       display: inline-block;
       position: relative;
       width: 100%;
     }
+
     .el-form-item {
       margin-bottom: 12px;
+
       .el-form-item__label {
         font-weight: 400;
         padding-right: 12px;
       }
+
       .el-select-dropdown__item,
       .el-date-editor.el-input,
       .el-input__inner {
@@ -282,12 +306,15 @@ $table-header-bg: #f3f3f3;
     }
   }
 }
+
 .extra-btn {
   margin-top: 10px;
 }
+
 .table-container {
   margin-top: 10px;
   margin-bottom: 20px;
+
   .el-table__body-wrapper.is-scrolling-none {
     &::-webkit-scrollbar {
       width: 8px;
@@ -307,75 +334,93 @@ $table-header-bg: #f3f3f3;
       border-radius: 2em;
     }
   }
+
   .el-table {
     tr th {
       border-color: $table-header-bg;
       background: $table-header-bg;
       text-align: center;
     }
+
     tr td {
       text-align: center;
     }
   }
+
   .footer-pagination {
     width: 100%;
     margin: 15px 0 7px 0;
     text-align: right;
     display: flex;
     justify-content: center;
+
     // position: absolute;
     .el-pagination__total {
       margin-right: 50px;
     }
+
     .el-pagination__jump {
       flex: 1;
       text-align: right;
     }
+
     .el-pagination__sizes {
       flex: 1;
       text-align: left;
     }
   }
 }
+
 .base-form-group {
   .el-form-item {
     margin-bottom: 15px !important;
     margin-right: 0 !important;
     width: 100%;
+
     .el-form-item__label {
       font-weight: 400;
       padding-right: 12px;
       line-height: 35px;
       font-size: 13px;
     }
+
     .el-form-item__content {
       line-height: 35px;
+
       .el-date-editor.el-input,
       .el-date-editor.el-input__inner {
         width: 100%;
       }
+
       .el-select {
         width: 100%;
+
         .el-form-item__label {
           font-weight: 400;
           padding-right: 12px;
         }
+
         .el-form-item__content {
           line-height: 35px;
+
           .el-select {
             width: 100%;
           }
+
           .el-input__icon {
             line-height: 35px;
           }
+
           .separator {
             text-align: center;
           }
+
           .el-date-editor.el-input,
           .el-textarea__inner {
             font-size: 12px;
             height: 80px;
           }
+
           .el-form-item__error {
             padding: 0;
             padding-top: 3px;

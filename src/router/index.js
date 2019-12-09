@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
 Vue.use(Router)
 
 /* Layout */
-import Layout from '@/layout'
+import Layout from '@/layout';
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -84,22 +84,67 @@ export const constantRoutes = [
       // }
     ]
   },
-
   {
     path: '/inspection_task',
     component: Layout,
+    redirect: 'noRedirect',
+    name: 'inspection_task',
+    meta: {
+      title: '国土巡检',
+      icon: 'form'
+    },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/taskList'),
+        path: 'task',
+        component: () => import('@/views/landInspection/taskList'),
         meta: { title: '巡检任务', icon: 'table' }
       },
       {
-        path: 'create',
+        path: 'add_task',
         name: 'createTask',
         hidden: true,
-        component: () => import('@/views/taskList/createTask')
+        component: () => import('@/views/landInspection/taskList/createTask'),
+        meta: { title: '新增巡检任务' }
+      },
+      {
+        path: 'task_details',
+        name: 'taskDetails',
+        hidden: true,
+        component: () => import('@/views/landInspection/taskList/detail'),
+        meta: { title: '巡检任务详情' }
+      },
+      {
+        path: 'task_edit',
+        name: 'taskEdit',
+        hidden: true,
+        component: () => import('@/views/landInspection/taskList/edit'),
+        meta: { title: '巡检任务编辑' }
+      },
+      {
+        path: 'inspection',
+        component: () => import('@/views/landInspection/inspectionPointList'),
+        meta: { title: '巡检点', icon: 'table' }
+      },
+      {
+        path: 'inspection_point_detail',
+        name: 'inspectionPointDetail',
+        hidden: true,
+        component: () =>
+          import('@/views/landInspection/inspectionPointList/detail'),
+        meta: { title: '巡检点详情' }
+      },
+      {
+        path: 'case',
+        component: () => import('@/views/landInspection/caseList'),
+        meta: { title: '案件', icon: 'table' }
+      },
+
+      {
+        path: 'case_detail',
+        name: 'caseDetail',
+        hidden: true,
+        component: () => import('@/views/landInspection/caseList/detail'),
+        meta: { title: '案件详情' }
       }
     ]
   },
@@ -130,7 +175,6 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
     path: 'external-link',
     component: Layout,

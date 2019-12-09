@@ -2,39 +2,29 @@
 <template>
   <div class="page-content">
     <div class="search-box">
-      <el-form
-        :model="form"
-        label-width="80px"
+      <TableSearch
+        label-width="70px"
+        @toOperate="getData"
       >
-        <el-row :gutter="20">
-          <el-col :span="6">
-            <el-form-item label="手机号">
-              <el-input
-                v-model="form.mobile"
-                placeholder="请输入手机号"
-                size="small"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="用户名">
-              <el-input
-                v-model="form.name"
-                placeholder="请输入用户名"
-                size="small"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label-width="0">
-              <el-button
-                type="primary"
-                size="small"
-              >查询</el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+        <el-col :span="6">
+          <el-form-item label="手机号">
+            <el-input
+              v-model="form.mobile"
+              placeholder="请输入手机号"
+              size="small"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="用户名">
+            <el-input
+              v-model="form.name"
+              placeholder="请输入用户名"
+              size="small"
+            />
+          </el-form-item>
+        </el-col>
+      </TableSearch>
     </div>
     <div class="extra-btns">
       <el-tabs
@@ -55,8 +45,11 @@
         />
       </el-tabs>
     </div>
-    <div class="table-container">
-      <el-table :data="tableData">
+    <div class="table-container  etc-table-wraper">
+      <el-table
+        :data="tableData"
+        border
+      >
         <el-table-column label="创建时间">
           <template slot-scope="scope">
             <span>{{ scope.row.createTime | dateFormat('date') }}</span>
@@ -114,10 +107,11 @@
 </template>
 
 <script>
-import { getUserList } from '@/api/user'
+import { getUserList } from '@/api/customer'
+import TableSearch from '@/components/TableSearch/index'
 export default {
   components: {
-
+    TableSearch
   },
   props: {
 

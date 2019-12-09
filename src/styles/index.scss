@@ -4,6 +4,9 @@
 @import "./element-ui.scss";
 @import "./sidebar.scss";
 @import "./common.scss";
+@import "./reset.scss";
+@import "./search.scss";
+@import "./tableContent.scss";
 
 body {
   height: 100%;
@@ -73,38 +76,45 @@ box布局常用的一些class
 
 @mixin box-layout($all: false) {
   $direction-list: top right bottom left;
-  $margin-prefix: "margin";
-  $padding-prefix: "padding";
+  $margin-prefix: 'margin';
+  $padding-prefix: 'padding';
   $baseUnitNum: 4;
-  $baseUnitText: "px";
+  $baseUnitText: 'px';
+
   @if $all {
     @for $i from 1 through 10 {
+
       //margin
       .#{$margin-prefix}-#{$i*$baseUnitNum} {
         #{$margin-prefix}: #{$i * $baseUnitNum}#{$baseUnitText} !important;
       }
+
       //padding
       .#{$padding-prefix}-#{$i*$baseUnitNum} {
         #{$padding-prefix}: #{$i * $baseUnitNum}#{$baseUnitText} !important;
       }
     }
-  } @else {
+  }
+
+  @else {
     @each $directionItem in $direction-list {
       @for $i from 1 through 20 {
+
         //margin
         .#{$margin-prefix}-#{$directionItem}-#{$i*$baseUnitNum} {
-          #{$margin-prefix}-#{$directionItem}: #{$i *
-            $baseUnitNum}#{$baseUnitText} !important;
+          #{$margin-prefix}-#{$directionItem}: #{$i*$baseUnitNum}#{$baseUnitText} !important;
         }
+
         //padding
         .#{$padding-prefix}-#{$directionItem}-#{$i*$baseUnitNum} {
-          #{$padding-prefix}-#{$directionItem}: #{$i *
-            $baseUnitNum}#{$baseUnitText} !important;
+          #{$padding-prefix}-#{$directionItem}: #{$i*$baseUnitNum}#{$baseUnitText} !important;
         }
       }
     }
   }
 }
+
+
 @include box-layout(true);
 @include box-layout(false);
 
@@ -121,4 +131,19 @@ box布局常用的一些class
     line-height: 15px;
     margin-top: 65px;
   }
+}
+
+.el-image {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  width: 300px;
+  height: 200px;
+}
+
+.el-input.is-disabled .el-input__inner {
+  background-color: #F5F7FA;
+  border-color: #E4E7ED;
+  color: #3b3b3b;
+  cursor: not-allowed;
 }

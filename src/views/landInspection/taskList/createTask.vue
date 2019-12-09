@@ -7,8 +7,8 @@
       :rules="rules"
       label-width="80px"
     >
-      <el-row :gutter="20">
-        <el-col :span="10">
+      <el-row :gutter="24">
+        <el-col :span="8">
           <el-form-item
             label="任务名称"
             prop="title"
@@ -20,7 +20,7 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form-item
             label="被指派人"
             prop="assinger"
@@ -44,7 +44,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form-item
             label="开始时间"
             prop="beginTime"
@@ -59,7 +59,7 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form-item
             label="截止时间"
             prop="expireTime"
@@ -74,13 +74,13 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="20">
+        <el-col :span="16">
           <el-form-item
             label="所在地区"
             required
           >
             <el-row
-              :gutter="20"
+              :gutter="24"
               type="flex"
             >
               <el-col :span="8">
@@ -107,7 +107,7 @@
             </el-row>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form-item
             label="开始地址"
             prop="startPoint"
@@ -132,7 +132,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form-item
             label="结束地址"
             prop="endPoint"
@@ -160,17 +160,17 @@
       </el-row>
     </el-form>
     <el-row>
-      <el-col :span="20">
+      <el-col :span="24">
         <div
           id="container"
           class="margin-top-12"
-          style="width: 100%; height: 350px;"
+          style="width: 100%; margin:0 auto;height: 350px;"
         />
       </el-col>
-      <el-col :span="20">
+      <el-col :span="24">
         <div class="text-center margin-top-40">
           <el-button
-            style="width: 200px;"
+            style="width: 240px;"
             type="danger"
             @click="submitData"
           >提交</el-button>
@@ -241,6 +241,7 @@ export default {
   },
   mounted() {
     getCustomerInfo().then(res => {
+      this.init()
       if (res && res.data) {
         this.sendPointObj = res.data || {}
         this.init()
@@ -251,7 +252,7 @@ export default {
     init() {
       let _this = this
       _this.detailMap = new AMap.Map('container', {
-        center: _this.sendPointObj.districtCoordinate.split(','),
+        center: _this.sendPointObj.districtCoordinate ? _this.sendPointObj.districtCoordinate.split(',') : '',
         resizeEnable: true,
         zoom: 14
       })
@@ -336,7 +337,7 @@ export default {
         path: path,
         showDir: true,
         strokeColor: 'green',
-        strokeWeight: 10
+        strokeWeight: 8
       })
       this.detailMap.add(polyline)
       // 缩放地图到合适的视野级别
@@ -347,7 +348,7 @@ export default {
       AMap.plugin('AMap.Geocoder', function() {
         var geocoder = new AMap.Geocoder({
           // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
-          city: '010'
+          city: '08'
         })
         var lnglat = location ? location.split(',') : []
         console.log(lnglat)
