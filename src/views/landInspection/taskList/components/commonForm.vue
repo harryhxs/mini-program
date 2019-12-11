@@ -330,7 +330,7 @@
     </headContentLine>
     <el-row v-if="pageType !== 'detial'">
       <el-col :span="24">
-        <div class="text-center margin-top-40">
+        <div class="text-center margin-top-40 margin-bottom-20">
           <el-button
             style="width: 200px;"
             type="danger"
@@ -450,6 +450,9 @@ export default {
 
   },
   mounted() {
+
+  },
+  activated() {
     getCustomerInfo().then(res => {
       this.init()
       if (res && res.data) {

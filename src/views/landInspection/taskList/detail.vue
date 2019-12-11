@@ -32,6 +32,9 @@ export default {
 
   },
   mounted() {
+
+  },
+  activated() {
     this.getData()
   },
   methods: {

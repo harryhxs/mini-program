@@ -100,6 +100,14 @@ export function addLandCase(data) {
   })
 }
 
+// 统计巡检员巡检任务情况
+export function checkStatisticsReport(data) {
+  return request({
+    url: '/land/statistics',
+    method: 'post',
+    data
+  })
+}
 // 导出案件
 export function fileDownload(data, fileName) {
   return new Promise((resolve, reject) => {

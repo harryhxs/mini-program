@@ -3,7 +3,7 @@
   <div class="table-container etc-table-wraper">
     <el-table
       :data="tableData"
-      height="250"
+      max-height="250"
       border
     >
       <el-table-column label="巡检标题">
@@ -38,7 +38,10 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <span @click="details(scope.row)">详情</span>
+          <span
+            class="e-text-link"
+            @click="details(scope.row)"
+          >详情</span>
         </template>
       </el-table-column>
     </el-table>

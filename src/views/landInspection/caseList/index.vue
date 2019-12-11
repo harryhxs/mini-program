@@ -195,6 +195,8 @@ export default {
 
   },
   created() {
+  },
+  activated() {
     this.getData()
   },
   methods: {

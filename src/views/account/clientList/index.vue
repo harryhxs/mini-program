@@ -82,13 +82,13 @@
       title="修改授权信息"
       :visible.sync="dialogFormVisible"
       :close-on-click-modal="false"
-      width="600px"
+      width="500px"
     >
       <el-form
         ref="editForm"
         :model="editForm"
         :rules="rules"
-        label-width="70px"
+        label-width="90px"
       >
         <el-form-item
           label="到期时间"
@@ -319,6 +319,8 @@ export default {
 
   },
   created() {
+  },
+  activated() {
     this.getData()
   },
   methods: {

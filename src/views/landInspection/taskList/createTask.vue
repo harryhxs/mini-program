@@ -240,6 +240,9 @@ export default {
 
   },
   mounted() {
+
+  },
+  activated() {
     getCustomerInfo().then(res => {
       this.init()
       if (res && res.data) {

@@ -26,7 +26,7 @@
       title="修改密码"
       :visible.sync="dialogFormVisible"
       :close-on-click-modal="false"
-      width="600px"
+      width="500px"
     >
       <!-- <input
         type="password"
@@ -36,7 +36,7 @@
         ref="editForm"
         :model="editForm"
         :rules="rules"
-        label-width="70px"
+        label-width="80px"
       >
         <el-form-item
           label="旧密码"
