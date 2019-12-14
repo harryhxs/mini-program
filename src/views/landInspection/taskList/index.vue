@@ -1,6 +1,9 @@
 <!-- 任务列表 -->
 <template>
-  <div class="page-content">
+  <div
+    v-loading="loading"
+    class="page-content"
+  >
     <div class="search-box">
       <TableSearch
         label-width="70px"
@@ -148,6 +151,7 @@ export default {
         beginTime: '',
         expireTime: ''
       },
+      loading: false,
       pageSize: 10,
       pageNum: 1,
       total: 0,
@@ -182,13 +186,26 @@ export default {
       }
       let params = {
         pageNum: this.pageNum,
-        pageSize: this.pageSize,
-        search: this.form
+        pageSize: this.pageSize
       }
-      getTaskList(params).then(res => {
+      this.loading = true
+      getTaskList({ ...params, ...this.form }).then(res => {
+        this.loading = false
         if (res && res.data) {
           this.tableData = res.data.list || []
+          this.pageSize = res.data.pageSize
+          this.pageNum = res.data.pageNum
+          this.total = res.data.total
+        } else {
+          this.pageSize = 0
+          this.pageNum = 0
+          this.total = 0
         }
+      }).catch(() => {
+        this.loading = false
+        this.pageSize = 0
+        this.pageNum = 0
+        this.total = 0
       })
     },
     createNew() {

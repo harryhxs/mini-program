@@ -184,6 +184,7 @@
 import AMap from 'AMap'
 import AMapUI from 'AMapUI'
 import { getCustomerInfo, creatTask, getUserList } from '@/api/customer'
+import { setDrievingLine } from '@/utils/index'
 export default {
   components: {
   },
@@ -324,27 +325,18 @@ export default {
       })
     },
     getPolyline() {
+      // 规划起点终点路线
       if (!this.form.startPoint || !this.form.endPoint) {
         return
       }
       let _this = this
-      let start = _this.form.startPoint.split(',')[0]
+      let start = _this.form.startPoint.split(',')
       let end = _this.form.endPoint.split(',')
-      console.log(start)
-      console.log(end)
-      let path = [
-        [Number(start[0]), Number(start[1])],
-        [Number(end[0]), Number(end[1])]
-      ]
-      var polyline = new AMap.Polyline({
-        path: path,
-        showDir: true,
-        strokeColor: 'green',
-        strokeWeight: 8
-      })
-      this.detailMap.add(polyline)
-      // 缩放地图到合适的视野级别
-      this.detailMap.setFitView()
+      let startLngLat = [Number(start[0]), Number(start[1])] // 起点
+      let endLngLat = [Number(end[0]), Number(end[1])] // 终点
+      this.detailMap.clearMap()
+      // 规划行车路线
+      setDrievingLine(startLngLat, endLngLat, AMap, _this)
     },
     getAddressBy(location, type) {
       let _this = this
@@ -364,6 +356,9 @@ export default {
               _this.form.startPointName = result.regeocode.formattedAddress
             } else {
               _this.form.endPointName = result.regeocode.formattedAddress
+            }
+            if (_this.form.startPointName && _this.form.endPointName) {
+              _this.getPolyline()
             }
           }
         })
@@ -409,6 +404,7 @@ export default {
           creatTask(this.form).then(res => {
             if (res && res.data) {
               this.$message.success('创建任务成功')
+              this.$router.go(-1)
             }
           })
         }

@@ -222,9 +222,19 @@ export default {
         this.loading = false
         if (res && res.data) {
           this.tableData = res.data.list || []
+          this.pageSize = res.data.pageSize
+          this.pageNum = res.data.pageNum
+          this.total = res.data.total
+        } else {
+          this.pageSize = 0
+          this.pageNum = 0
+          this.total = 0
         }
       }).catch(() => {
         this.loading = false
+        this.pageSize = 0
+        this.pageNum = 0
+        this.total = 0
       })
     },
     handleSizeChange(value) {
@@ -282,9 +292,6 @@ export default {
       this.loading = true
       const fileName = '案件列表' + format(new Date(), 'yyyy-MM-dd HH时mm分ss秒') + '.csv'
       fileDownload(obj, fileName).then(res => {
-        if (res === 'false') {
-          this.$message.error('导出失败')
-        }
         this.loading = false
       }).catch(() => {
         this.$message.error('导出失败')

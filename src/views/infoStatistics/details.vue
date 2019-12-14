@@ -68,14 +68,6 @@
               </template>
             </el-table-column>
           </template>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <span
-                class="e-text-link margin-right-4"
-                @click="viewDetail(scope.row)"
-              >详情</span>
-            </template>
-          </el-table-column>
         </el-table>
       </div>
     </headContentLine>
@@ -84,6 +76,7 @@
         <echartsContent
           :choose-list="chooseList"
           :status="status"
+          type="detail"
           :title-list="titleList"
         />
       </headContentLine>
@@ -110,7 +103,7 @@
           <el-col :span="12">
             <circleEcharts
               id="circle-echart2"
-              title="任务数量(张)"
+              title="巡检点数量(个)"
               type="张"
               :status="status"
               :resource-list="resourceList3"
@@ -122,7 +115,7 @@
   </div>
 </template>
 <script>
-import { checkPersonReport } from '@/api/task'
+import { checkStatisticsReport } from '@/api/task'
 import TableSearch from '@/components/TableSearch/index'
 import headContentLine from '@/components/commonLine'
 import echartsContent from './components/echarts'
@@ -140,11 +133,11 @@ export default {
   data() {
     return {
       form: {
-        assignerId: '',
+        statsType: 1,
         startTime: '',
         endTime: ''
       },
-      titleList: ['总里程数(公里)', '图片数量(张)', '任务数量(个)'],
+      titleList: ['总里程数(公里)', '图片数量(张)', '巡检点数量(个)'],
       chooseList: [], // 柱状图
       resourceList1: [], // 生成报表的数据
       resourceList2: [], // 生成报表的数据
@@ -156,16 +149,39 @@ export default {
       total: 0,
       multipleSelection: [],
       tableData: [
-
+        {
+          inspectName: '巡查任务A',
+          pointNum: '12',
+          mileage: '32',
+          picSize: '122'
+        },
+        {
+          inspectName: '巡查任务B',
+          pointNum: '12',
+          mileage: '32',
+          picSize: '122'
+        },
+        {
+          inspectName: '巡查任务C',
+          pointNum: '2',
+          mileage: '12',
+          picSize: '12'
+        },
+        {
+          inspectName: '巡查任务D',
+          pointNum: '43',
+          mileage: '667',
+          picSize: '122'
+        }
       ],
       thList: [
         {
-          title: '指派人',
-          prop: 'userName'
+          title: '任务名称',
+          prop: 'inspectName'
         },
         {
-          title: '任务数量',
-          prop: 'inspectNum'
+          title: '巡检点数量',
+          prop: 'pointNum'
         },
         {
           title: '里程数(公里)',
@@ -185,7 +201,6 @@ export default {
 
   },
   mounted() {
-
   },
   activated() {
     this.getData()
@@ -200,12 +215,13 @@ export default {
         }
         return
       }
+      this.form.assignerId = this.$route.query.id
       this.loading = true
       this.resourceList1 = []
       this.resourceList2 = []
       this.resourceList3 = []
       this.chooseList = []
-      checkPersonReport({ ...this.form }).then(res => {
+      checkStatisticsReport({ ...this.form }).then(res => {
         this.loading = false
         if (res && res.data) {
           this.tableData = res.data || []
@@ -221,9 +237,9 @@ export default {
       this.chooseList = []
       this.multipleSelection.forEach((item, key) => {
         // 设置数据
-        this.resourceList1.push({ value: item.mileage, legendname: item.userName, name: (key + 1) + '-' + item.userName })
-        this.resourceList2.push({ value: item.picSize, legendname: item.userName, name: (key + 1) + '-' + item.userName })
-        this.resourceList3.push({ value: item.inspectNum, legendname: item.userName, name: (key + 1) + '-' + item.userName })
+        this.resourceList1.push({ value: item.mileage, legendname: item.inspectName, name: (key + 1) + '-' + item.inspectName })
+        this.resourceList2.push({ value: item.picSize, legendname: item.inspectName, name: (key + 1) + '-' + item.inspectName })
+        this.resourceList3.push({ value: item.pointNum, legendname: item.inspectName, name: (key + 1) + '-' + item.inspectName })
       })
       this.chooseList = this.multipleSelection
       // 选中数据，点击生成报表
@@ -245,21 +261,7 @@ export default {
       this.multipleSelection = val
     },
     viewDetail(row) {
-      this.$router.push(
-        {
-          path: '/info_statistics/details',
-          query: { id: row.userId }
-        }
-      )
-    },
-    returnColor() {
-      // 动态生成随机颜色
-      let colorStr = ''
-      let randomArr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
-      for (let i = 0; i < 6; i++) {
-        colorStr += randomArr[Math.ceil(Math.random() * (15 - 0) + 0)];
-      }
-      return '#' + colorStr
+      this.$router.push('/info_statistics/details')
     }
   }
 }

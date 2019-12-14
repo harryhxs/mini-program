@@ -162,9 +162,19 @@ export default {
         this.loading = false
         if (res && res.data) {
           this.tableData = res.data.list || []
+          this.pageSize = res.data.pageSize
+          this.pageNum = res.data.pageNum
+          this.total = res.data.total
+        } else {
+          this.pageSize = 0
+          this.pageNum = 0
+          this.total = 0
         }
       }).catch(() => {
         this.loading = false
+        this.pageSize = 0
+        this.pageNum = 0
+        this.total = 0
       })
     },
     createNew() {

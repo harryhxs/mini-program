@@ -161,6 +161,12 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/infoStatistics/index'),
         meta: { title: '信息统计', icon: 'nested' }
+      },
+      {
+        path: 'details',
+        component: () => import('@/views/infoStatistics/details'),
+        hidden: true,
+        meta: { title: '个人详情', icon: 'nested' }
       }
     ]
   },
