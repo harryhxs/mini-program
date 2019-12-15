@@ -1,5 +1,5 @@
 module.exports = {
-  title: "智能巡检平台",
+  title: '智能巡检平台',
 
   /**
    * @type {boolean} true | false

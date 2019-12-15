@@ -226,14 +226,14 @@ export default {
           this.pageNum = res.data.pageNum
           this.total = res.data.total
         } else {
-          this.pageSize = 0
-          this.pageNum = 0
+          this.pageSize = 10
+          this.pageNum = 1
           this.total = 0
         }
       }).catch(() => {
         this.loading = false
-        this.pageSize = 0
-        this.pageNum = 0
+        this.pageSize = 10
+        this.pageNum = 1
         this.total = 0
       })
     },
