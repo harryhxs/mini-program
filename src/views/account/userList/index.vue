@@ -149,14 +149,9 @@ export default {
         search: this.form
       }
       getUserList(params).then(res => {
-
-      })
-      this.tableData.push({
-        createTime: '2019-11-16 14:45:00',
-        name: '小兰兰',
-        realName: '李小兰',
-        moblie: '17783136888',
-        approvalStatus: 0
+        if (res && res.data) {
+          this.tableData = res.data.list
+        }
       })
     },
     getStatusName(status) {

@@ -1,7 +1,10 @@
 <!-- 客户列表 -->
 <template>
   <div class="page-content">
-    <div class="search-box">
+    <div
+      v-if="userInfo.userType === 'admin'"
+      class="search-box"
+    >
       <TableSearch
         label-width="70px"
         @toOperate="getData"
@@ -26,7 +29,10 @@
         </el-col>
       </TableSearch>
     </div>
-    <div class="extra-btn">
+    <div
+      v-if="userInfo.userType === 'admin'"
+      class="extra-btn"
+    >
       <el-button
         type="danger"
         size="small"
@@ -244,6 +250,7 @@
 import { createClient, getClientList, updateEndTime } from '@/api/client'
 import CitySelect from '@/components/CitySelect'
 import TableSearch from '@/components/TableSearch/index'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     CitySelect,
@@ -313,7 +320,9 @@ export default {
     }
   },
   computed: {
-
+    ...mapGetters([
+      'userInfo'
+    ])
   },
   watch: {
 
@@ -328,7 +337,13 @@ export default {
       let params = { ...this.form }
       getClientList(params).then(res => {
         if (res && res.data) {
-          this.tableData = res.data.list || []
+          if (this.userInfo.userType !== 'admin') {
+            this.tableData = res.data.list.filter(item => {
+              return item.id === this.userInfo.memberId
+            }) || []
+          } else {
+            this.tableData = res.data.list || []
+          }
         }
       })
     },

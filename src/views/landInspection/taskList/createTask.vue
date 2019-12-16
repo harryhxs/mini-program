@@ -244,11 +244,22 @@ export default {
 
   },
   activated() {
+    this.form = {
+      title: '',
+      assingerName: '',
+      beginTime: '',
+      expireTime: '',
+      startPointName: '',
+      endPointName: '',
+      startPoint: '',
+      endPoint: '',
+      assigner: '',
+      inspectType: 1
+    }
     getCustomerInfo().then(res => {
       this.init()
       if (res && res.data) {
         this.sendPointObj = res.data || {}
-        this.init()
       }
     })
   },

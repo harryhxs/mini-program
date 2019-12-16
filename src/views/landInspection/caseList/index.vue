@@ -255,7 +255,7 @@ export default {
       }
     },
     viewDetail(row) {
-      this.$router.push({ path: '/inspection_task/case_detail', query: { id: row.id } })
+      this.$router.push({ path: '/land_inspect/case_detail', query: { id: row.id } })
     },
     deleteTask(row) {
 

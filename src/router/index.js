@@ -132,7 +132,19 @@ export const constantRoutes = [
         component: () =>
           import('@/views/landInspection/inspectionPointList/detail'),
         meta: { title: '巡检点详情' }
-      },
+      }
+    ]
+  },
+  {
+    path: '/land_inspect',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'inspection_task',
+    meta: {
+      title: '国土巡检',
+      icon: 'form'
+    },
+    children: [
       {
         path: 'case',
         component: () => import('@/views/landInspection/caseList'),
@@ -170,16 +182,16 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
+  // {
+  //   path: 'external-link',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
+  //       meta: { title: 'External Link', icon: 'link' }
+  //     }
+  //   ]
+  // },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
