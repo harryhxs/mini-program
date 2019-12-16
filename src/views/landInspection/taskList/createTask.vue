@@ -118,6 +118,7 @@
               remote
               size="small"
               reserve-keyword
+              clearable
               placeholder="请输入关键词"
               :remote-method="autoCompleteStart"
               :loading="loading"
@@ -143,6 +144,7 @@
               remote
               size="small"
               reserve-keyword
+              clearable
               placeholder="请输入关键词"
               :remote-method="autoCompleteEnd"
               :loading="loading"
@@ -358,21 +360,31 @@ export default {
         })
         var lnglat = location ? location.split(',') : []
         console.log(lnglat)
-
-        geocoder.getAddress(lnglat, function(status, result) {
-          if (status === 'complete' && result.info === 'OK') {
-            // result为对应的地理位置详细信息
-            console.log(result)
-            if (type == 'start') {
-              _this.form.startPointName = result.regeocode.formattedAddress
-            } else {
-              _this.form.endPointName = result.regeocode.formattedAddress
+        if (lnglat[0] !== 'undefined' && lnglat[1] !== 'undefined') {
+          geocoder.getAddress(lnglat, function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+              // result为对应的地理位置详细信息
+              console.log(result)
+              if (type == 'start') {
+                _this.form.startPointName = result.regeocode.formattedAddress
+              } else {
+                _this.form.endPointName = result.regeocode.formattedAddress
+              }
+              if (_this.form.startPointName && _this.form.endPointName) {
+                _this.getPolyline()
+              }
             }
-            if (_this.form.startPointName && _this.form.endPointName) {
-              _this.getPolyline()
-            }
+          })
+        } else {
+          _this.$message.warning('当前地址经纬度获取失败，请换一个地址试试')
+          if (type == 'start') {
+            _this.form.startPointName = ''
+            _this.form.startPoint = ''
+          } else {
+            _this.form.endPointName = ''
+            _this.form.endPoint = ''
           }
-        })
+        }
       })
     },
     changeStart(val) {
